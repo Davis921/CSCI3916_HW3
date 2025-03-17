@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -70,10 +71,13 @@ router.post('/signin', async (req, res) => { // Use async/await
 router.route('/movies')
   .get(authJwtController.isAuthenticated, async (req, res) => {
     try {
-        const movies = await Movie.find();
-        res.status(200).json({ success: true, movies });
+      const movies = await Movie.find(); // Fetch all movies
+      if (movies.length === 0) {
+          return res.status(404).json([]); // Return an empty array instead of an error object
+      }
+      res.status(200).json(movies); // Return only the array of movies
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Error fetching movies.' });
+        res.status(500).json({ success: false, message: 'Error fetching movies.', error: err.message });
     }
   })
   .post(authJwtController.isAuthenticated, async (req, res) => {
