@@ -7,8 +7,6 @@ const cors = require('cors');
 const User = require('./Users');
 const Movie = require('./Movies'); // You're not using Movie, consider removing it
 
-dotenv.config();
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
